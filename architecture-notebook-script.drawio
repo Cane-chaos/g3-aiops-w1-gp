@@ -1,0 +1,118 @@
+<mxfile host="65bd71144e">
+    <diagram id="g3-recommended-notebook-script-architecture" name="G3 Recommended Notebook Script Architecture">
+        <mxGraphModel dx="419" dy="897" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="980" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="G3 Recommended Lightweight Architecture - Notebook Narrative + Script Pipeline" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=26;fontStyle=1;fontColor=#111827;" parent="1" vertex="1">
+                    <mxGeometry x="215" y="25" width="1170" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="workspace" value="Local Workspace - Recommended Delivery" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#f8fafc;strokeColor=#334155;strokeWidth=2;fontStyle=1;fontColor=#111827;verticalAlign=top;spacingTop=14;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="95" width="1500" height="775" as="geometry"/>
+                </mxCell>
+                <mxCell id="raw-zone" value="1. Raw Evidence" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#94a3b8;strokeWidth=2;fontStyle=1;fontColor=#0f172a;verticalAlign=top;spacingTop=12;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="145" width="255" height="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="csv-icon" value="CSV" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f97316;strokeColor=#c2410c;fontColor=#ffffff;fontStyle=1;fontSize=16;align=center;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="125" y="215" width="70" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="metrics" value="metrics/*.csv&lt;br&gt;Prometheus-style 30s samples" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#f97316;fontColor=#7c2d12;fontSize=13;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="205" y="205" width="110" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="jsonl-icon" value="JSONL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16a34a;strokeColor=#166534;fontColor=#ffffff;fontStyle=1;fontSize=15;align=center;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="125" y="325" width="70" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="logs" value="logs/*.jsonl&lt;br&gt;structured log events" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="205" y="315" width="110" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="rubric-file" value="Rubric&lt;br&gt;WHEN / WHERE / WHAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#4f46e5;fontColor=#312e81;fontSize=13;fontStyle=1;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="125" y="435" width="190" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="notebook-zone" value="2. Notebook Narrative Layer" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#94a3b8;strokeWidth=2;fontStyle=1;fontColor=#0f172a;verticalAlign=top;spacingTop=12;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="395" y="145" width="270" height="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="notebook-icon" value="ipynb" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f59e0b;strokeColor=#b45309;fontColor=#ffffff;fontStyle=1;fontSize=16;align=center;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="215" width="70" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="notebook" value="notebooks/analysis.ipynb&lt;br&gt;EDA, charts, explanation, mentor walkthrough&lt;br&gt;&lt;br&gt;&lt;b&gt;Calls reusable scripts instead of duplicating logic&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontSize=13;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="290" width="200" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="notebook-note" value="Purpose: explain decisions, inspect plots, and show evidence interactively." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#7c2d12;fontSize=12;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="465" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="script-zone" value="3. Script Source of Truth" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#94a3b8;strokeWidth=2;fontStyle=1;fontColor=#0f172a;verticalAlign=top;spacingTop=12;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="715" y="145" width="330" height="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="python-icon" value="Python" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3776ab;strokeColor=#1f4e79;fontColor=#ffffff;fontStyle=1;fontSize=14;align=center;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="195" width="75" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="runner" value="scripts/run_pipeline.py&lt;br&gt;one command: make analyze" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e3a8a;fontSize=13;fontStyle=1;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="845" y="195" width="155" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="validate" value="1. validate_data.py&lt;br&gt;schema, timestamp continuity, JSONL parse" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;fontColor=#0f172a;fontSize=12;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="280" width="245" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="features" value="2. build_features.py&lt;br&gt;memory ratio, GC trend, rolling latency, log windows" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;fontColor=#0f172a;fontSize=12;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="350" width="245" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="detect" value="3. detect_anomalies.py&lt;br&gt;Rolling z-score / MAD / Isolation Forest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;fontColor=#7f1d1d;fontSize=12;fontStyle=1;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="420" width="245" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="report-step" value="4. correlate_and_report.py&lt;br&gt;metrics + log patterns → WHEN / WHERE / WHAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=12;fontStyle=1;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="490" width="245" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="output-zone" value="4. Generated Evidence + Submission" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#94a3b8;strokeWidth=2;fontStyle=1;fontColor=#0f172a;verticalAlign=top;spacingTop=12;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="1095" y="145" width="370" height="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="generated" value="reports/generated&lt;br&gt;validation_summary.json&lt;br&gt;anomalies.csv&lt;br&gt;log_pattern_counts.csv&lt;br&gt;correlation_timeline.csv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#eab308;fontColor=#713f12;fontSize=12;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="1135" y="215" width="145" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="figures" value="reports/figures&lt;br&gt;memory + GC + latency&lt;br&gt;5xx + restarts&lt;br&gt;downstream timeout&lt;br&gt;log pattern timeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=12;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="1300" y="215" width="135" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="findings" value="FINDINGS.generated.md&lt;br&gt;→ final FINDINGS.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;fontStyle=1;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="1135" y="375" width="145" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="submit" value="SUBMIT.md&lt;br&gt;reflection + contributions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e3a8a;fontSize=13;fontStyle=1;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="1300" y="375" width="135" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="outputs-note" value="Deliverable is reproducible: rerun scripts from raw data, refresh notebook visuals, then finalize markdown." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#4f46e5;fontColor=#312e81;fontSize=12;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="1135" y="480" width="300" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="contract-zone" value="Mentor Review Contract" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#94a3b8;strokeWidth=2;fontStyle=1;fontColor=#0f172a;verticalAlign=top;spacingTop=12;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="625" width="1375" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="recommended" value="Recommended pattern&lt;br&gt;&lt;b&gt;Notebook = narrative&lt;/b&gt;&lt;br&gt;&lt;b&gt;Scripts = repeatable computation&lt;/b&gt;&lt;br&gt;This matches the assignment: notebook/script/both accepted, but both gives the strongest evidence trail." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#4f46e5;fontColor=#312e81;fontSize=13;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="690" width="330" height="92" as="geometry"/>
+                </mxCell>
+                <mxCell id="rubric" value="Rubric coverage&lt;br&gt;1. Code reruns raw data → result&lt;br&gt;2. At least 2 anomaly detectors + comparison&lt;br&gt;3. Log-pattern extraction, not manual raw-line reading&lt;br&gt;4. FINDINGS.md answers WHEN / WHERE / WHAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#7c2d12;fontSize=13;align=left;spacingLeft=12;" parent="1" vertex="1">
+                    <mxGeometry x="520" y="680" width="355" height="112" as="geometry"/>
+                </mxCell>
+                <mxCell id="knowledge" value="Knowledge applied&lt;br&gt;Metric anomaly detection&lt;br&gt;Log mining / pattern extraction&lt;br&gt;Feature engineering for time series&lt;br&gt;Metric + log correlation for RCA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;align=left;spacingLeft=12;" parent="1" vertex="1">
+                    <mxGeometry x="925" y="680" width="310" height="112" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" value="read raw evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#475569;fontColor=#334155;strokeWidth=2;" parent="1" source="raw-zone" target="notebook-zone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="calls scripts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#2563eb;fontColor=#1e3a8a;strokeWidth=2;" parent="1" source="notebook-zone" target="script-zone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#475569;" parent="1" source="runner" target="validate" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#475569;" parent="1" source="validate" target="features" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#475569;" parent="1" source="features" target="detect" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#475569;" parent="1" source="detect" target="report-step" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" value="writes evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#16a34a;fontColor=#14532d;strokeWidth=2;" parent="1" source="script-zone" target="output-zone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

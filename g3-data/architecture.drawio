@@ -1,0 +1,232 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram id="w1-d3-aiops-data-layer-v2" name="W1-D3 AIOps Data Layer">
+    <mxGraphModel dx="1794" dy="1511" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1050" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=26;fontStyle=1;fontColor=#0f172a;" value="W1-D3: Data Layer Architecture + Observability Pipeline&#xa;Payment Service Anomaly Detection" vertex="1">
+          <mxGeometry height="70" width="1120" x="290" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_ingest" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#1e3a8a;fontSize=15;fontStyle=1;align=left;verticalAlign=top;spacingLeft=16;spacingTop=10;dashed=0;" value="Ingest" vertex="1">
+          <mxGeometry height="230" width="520" x="70" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_transport" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#fdba74;fontColor=#7c2d12;fontSize=15;fontStyle=1;align=left;verticalAlign=top;spacingLeft=16;spacingTop=10;" value="Transport + Processing" vertex="1">
+          <mxGeometry height="230" width="520" x="630" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_storage" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;fontColor=#334155;fontSize=15;fontStyle=1;align=left;verticalAlign=top;spacingLeft=16;spacingTop=10;" value="Signal Storage" vertex="1">
+          <mxGeometry height="530" width="410" x="1190" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_response" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#4c1d95;fontSize=15;fontStyle=1;align=left;verticalAlign=top;spacingLeft=16;spacingTop=10;" value="Query + Response" vertex="1">
+          <mxGeometry height="210" width="980" x="350" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="svcCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82f6;shadow=1;" value="" vertex="1">
+          <mxGeometry height="150" width="180" x="120" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="svcIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/kubernetes/326CE5;" value="" vertex="1">
+          <mxGeometry height="50" width="50" x="185" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="svcLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Payment Service&#xa;metrics + logs + traces" vertex="1">
+          <mxGeometry height="55" width="160" x="130" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="otelCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0284c7;shadow=1;" value="" vertex="1">
+          <mxGeometry height="150" width="180" x="370" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="otelIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/opentelemetry/000000;" value="" vertex="1">
+          <mxGeometry height="50" width="50" x="435" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="otelLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="OTel Collector&#xa;DaemonSet, batch, retry" vertex="1">
+          <mxGeometry height="55" width="160" x="380" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="kafkaCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ca8a04;shadow=1;" value="" vertex="1">
+          <mxGeometry height="150" width="180" x="685" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="kafkaIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/apachekafka/231F20;" value="" vertex="1">
+          <mxGeometry height="50" width="50" x="750" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="kafkaLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Kafka Topics&#xa;buffer + replay + fan-out" vertex="1">
+          <mxGeometry height="55" width="160" x="695" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="flinkCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ea580c;shadow=1;" value="" vertex="1">
+          <mxGeometry height="150" width="180" x="940" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="flinkIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/apacheflink/E6526F;" value="" vertex="1">
+          <mxGeometry height="50" width="50" x="1005" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="flinkLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Stream Processor&#xa;parse, enrich, features" vertex="1">
+          <mxGeometry height="55" width="160" x="950" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="metricCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;shadow=1;" value="" vertex="1">
+          <mxGeometry height="90" width="300" x="1240" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="metricIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/prometheus/E6522C;" value="" vertex="1">
+          <mxGeometry height="42" width="42" x="1265" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="metricLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="VictoriaMetrics&#xa;Prometheus-compatible metric store" vertex="1">
+          <mxGeometry height="55" width="210" x="1320" y="198" as="geometry" />
+        </mxCell>
+        <mxCell id="lokiCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;shadow=1;" value="" vertex="1">
+          <mxGeometry height="90" width="300" x="1240" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="lokiIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/grafana/F46800;" value="" vertex="1">
+          <mxGeometry height="42" width="42" x="1265" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="lokiLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Grafana Loki&#xa;label-indexed hot log store" vertex="1">
+          <mxGeometry height="55" width="210" x="1320" y="318" as="geometry" />
+        </mxCell>
+        <mxCell id="traceCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;shadow=1;" value="" vertex="1">
+          <mxGeometry height="90" width="300" x="1240" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="traceIconA" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f59e0b;strokeColor=#92400e;" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="1268" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="traceIconB" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f59e0b;strokeColor=#92400e;" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="1297" y="458" as="geometry" />
+        </mxCell>
+        <mxCell id="traceIconC" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f59e0b;strokeColor=#92400e;" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="1278" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="traceLine1" edge="1" parent="1" source="traceIconA" style="endArrow=none;html=1;rounded=0;strokeWidth=2;strokeColor=#92400e;" target="traceIconB" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="traceLine2" edge="1" parent="1" source="traceIconB" style="endArrow=none;html=1;rounded=0;strokeWidth=2;strokeColor=#92400e;" target="traceIconC" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="traceLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Jaeger&#xa;sampled trace bottleneck store" vertex="1">
+          <mxGeometry height="55" width="210" x="1320" y="438" as="geometry" />
+        </mxCell>
+        <mxCell id="s3Card" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;shadow=1;" value="" vertex="1">
+          <mxGeometry height="90" width="300" x="1240" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="s3Icon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/amazons3/569A31;" value="" vertex="1">
+          <mxGeometry height="42" width="42" x="1265" y="565" as="geometry" />
+        </mxCell>
+        <mxCell id="s3Label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="S3 + Parquet&#xa;cold archive + training data" vertex="1">
+          <mxGeometry height="55" width="210" x="1320" y="558" as="geometry" />
+        </mxCell>
+        <mxCell id="grafanaCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7c3aed;shadow=1;" value="" vertex="1">
+          <mxGeometry height="120" width="170" x="410" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="grafanaIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/grafana/F46800;" value="" vertex="1">
+          <mxGeometry height="42" width="42" x="475" y="775" as="geometry" />
+        </mxCell>
+        <mxCell id="grafanaLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Grafana&#xa;dashboards + drilldown" vertex="1">
+          <mxGeometry height="45" width="150" x="420" y="825" as="geometry" />
+        </mxCell>
+        <mxCell id="pagerCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#dc2626;shadow=1;" value="" vertex="1">
+          <mxGeometry height="120" width="170" x="650" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="pagerIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/pagerduty/06AC38;" value="" vertex="1">
+          <mxGeometry height="42" width="42" x="715" y="775" as="geometry" />
+        </mxCell>
+        <mxCell id="pagerLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Alertmanager&#xa;PagerDuty routing" vertex="1">
+          <mxGeometry height="45" width="150" x="660" y="825" as="geometry" />
+        </mxCell>
+        <mxCell id="mlCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9333ea;shadow=1;" value="" vertex="1">
+          <mxGeometry height="120" width="170" x="890" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="mlIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/tensorflow/FF6F00;" value="" vertex="1">
+          <mxGeometry height="42" width="42" x="955" y="775" as="geometry" />
+        </mxCell>
+        <mxCell id="mlLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Anomaly Model&#xa;rolling feature scoring" vertex="1">
+          <mxGeometry height="45" width="150" x="900" y="825" as="geometry" />
+        </mxCell>
+        <mxCell id="athenaCard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9333ea;shadow=1;" value="" vertex="1">
+          <mxGeometry height="120" width="170" x="1130" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="athenaIcon" parent="1" style="shape=image;html=1;imageAspect=0;aspect=fixed;image=https://cdn.simpleicons.org/duckdb/FFF000;" value="" vertex="1">
+          <mxGeometry height="42" width="42" x="1195" y="775" as="geometry" />
+        </mxCell>
+        <mxCell id="athenaLabel" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#0f172a;" value="Athena / DuckDB&#xa;SQL for postmortem" vertex="1">
+          <mxGeometry height="45" width="150" x="1140" y="825" as="geometry" />
+        </mxCell>
+        <mxCell id="note" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#ffffff;strokeColor=#64748b;fontColor=#334155;fontSize=13;align=left;spacing=12;" value="Design notes&#xa;OTel keeps instrumentation vendor-neutral.&#xa;Kafka gives buffer, replay, and independent consumers.&#xa;Loki stores low-cardinality label-indexed logs.&#xa;Jaeger traces are sampled to control cost.&#xa;S3 + Parquet keeps cheap training/postmortem data." vertex="1">
+          <mxGeometry height="190" width="420" x="90" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="svcCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#1e40af;" target="otelCard" value="OTLP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="otelCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#1e40af;" target="kafkaCard" value="batches">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="kafkaCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ea580c;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#9a3412;" target="flinkCard" value="consume">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="flinkCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;fontSize=12;fontColor=#1d4ed8;" target="metricCard" value="metrics">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="flinkCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#16a34a;strokeWidth=3;endArrow=block;endFill=1;fontSize=12;fontColor=#15803d;" target="lokiCard" value="logs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1180" y="300" />
+              <mxPoint x="1180" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="flinkCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d97706;strokeWidth=3;endArrow=block;endFill=1;fontSize=12;fontColor=#b45309;" target="traceCard" value="traces">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="170" />
+              <mxPoint x="1570" y="170" />
+              <mxPoint x="1570" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="flinkCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9333ea;strokeWidth=3;endArrow=block;endFill=1;fontSize=12;fontColor=#7e22ce;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=-0.002;entryY=0.352;entryDx=0;entryDy=0;entryPerimeter=0;" target="s3Card" value="archive">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1075" y="577" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="metricCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748b;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="grafanaCard" value="dashboards">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1610" y="230" />
+              <mxPoint x="1610" y="950" />
+              <mxPoint x="602" y="950" />
+              <mxPoint x="602" y="820" />
+            </Array>
+            <mxPoint x="1347.48" y="200.04761904761904" as="sourcePoint" />
+            <mxPoint x="602.527619047619" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="metricCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#dc2626;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#b91c1c;" target="pagerCard" value="alerts">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="210" />
+              <mxPoint x="1160" y="430" />
+              <mxPoint x="740" y="430" />
+            </Array>
+            <mxPoint x="1320" y="305" as="sourcePoint" />
+            <mxPoint x="665.047619047619" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="flinkCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9333ea;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#7e22ce;" target="mlCard" value="features">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="660" />
+              <mxPoint x="1030" y="660" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="s3Card" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9333ea;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#7e22ce;" target="athenaCard" value="SQL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="lokiCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748b;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;" target="grafanaCard" value="log drilldown">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="traceCard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748b;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;" target="grafanaCard" value="trace drilldown">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
