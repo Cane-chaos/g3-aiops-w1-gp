@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G3 AIOps Lab Presentation</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --soft: #eef2f7;
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #d8e0ea;
+      --orange: #f97316;
+      --blue: #2563eb;
+      --green: #16a34a;
+      --red: #dc2626;
+      --purple: #7c3aed;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+    body {
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    .progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      width: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--orange), var(--blue));
+      z-index: 20;
+    }
+
+    .counter {
+      position: fixed;
+      right: 22px;
+      bottom: 18px;
+      z-index: 20;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 10px;
+    }
+
+    .slide {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(26px, 5vh, 56px) clamp(24px, 6vw, 84px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wrap { width: min(1120px, 100%); }
+    .wrap.wide { width: min(1260px, 100%); }
+    .wrap.full { width: min(1320px, 100%); }
+    .title-wrap { width: min(920px, 100%); text-align: center; }
+    .eyebrow {
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+    h2 {
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+    }
+    h3 { font-size: 18px; margin-bottom: 8px; }
+    .lead {
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 24px);
+      max-width: 840px;
+      margin: 0 auto;
+    }
+    .sublead {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 820px;
+    }
+    .accent { color: var(--orange); }
+    .blue { color: var(--blue); }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+
+    .grid { display: grid; gap: 18px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    .card.tight { padding: 16px; }
+    .card p, .card li { color: var(--muted); font-size: 15px; }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .stat .num {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(30px, 4vw, 46px);
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat .label {
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+    .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 112px;
+      position: relative;
+    }
+    .step::after {
+      content: "->";
+      position: absolute;
+      right: -13px;
+      top: 42px;
+      color: var(--orange);
+      font-weight: 800;
+    }
+    .step:last-child::after { content: ""; }
+    .step b { display: block; margin-bottom: 6px; }
+    .step span { color: var(--muted); font-size: 13px; }
+    .timeline {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 12px 18px;
+      align-items: start;
+    }
+    .time {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .event {
+      border-left: 3px solid var(--line);
+      padding-left: 16px;
+      padding-bottom: 14px;
+      color: var(--muted);
+    }
+    .event strong { color: var(--ink); }
+    .event.danger { border-color: var(--red); }
+    .event.warn { border-color: var(--orange); }
+    .event.good { border-color: var(--green); }
+    .image-frame {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 10px;
+    }
+    .image-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .evidence-slide {
+      align-items: flex-start;
+      padding-top: clamp(30px, 4vh, 46px);
+      padding-bottom: clamp(18px, 3vh, 34px);
+    }
+    .evidence-slide h2 {
+      font-size: clamp(36px, 4.7vw, 64px);
+      max-width: 1180px;
+    }
+    .metric-figure {
+      margin-top: 14px;
+      padding: 8px;
+    }
+    .metric-figure img {
+      max-height: calc(100vh - 285px);
+      object-fit: contain;
+    }
+    .log-evidence-grid {
+      display: grid;
+      grid-template-columns: minmax(330px, 0.68fr) minmax(620px, 1.32fr);
+      gap: 26px;
+      align-items: center;
+      margin-top: 18px;
+    }
+    .log-figure {
+      padding: 8px;
+    }
+    .log-figure img {
+      max-height: calc(100vh - 290px);
+      object-fit: contain;
+    }
+    .architecture-figure {
+      margin-top: 14px;
+      padding: 8px;
+    }
+    .architecture-figure img {
+      max-height: calc(100vh - 168px);
+      object-fit: contain;
+    }
+    .detector-figure {
+      margin-top: 12px;
+      padding: 8px;
+    }
+    .detector-figure img {
+      max-height: calc(100vh - 330px);
+      object-fit: contain;
+    }
+    .evidence-notes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .evidence-note {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      min-height: 86px;
+    }
+    .evidence-note h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .evidence-note p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      font-size: 15px;
+    }
+    th {
+      color: var(--ink);
+      background: var(--soft);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    td { color: var(--muted); }
+    td strong { color: var(--ink); }
+    .footer {
+      position: absolute;
+      left: clamp(24px, 6vw, 84px);
+      right: clamp(24px, 6vw, 84px);
+      bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      color: #64748b;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .kbd {
+      display: inline-block;
+      padding: 2px 7px;
+      border: 1px solid var(--line);
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      background: white;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .note {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 15px;
+    }
+    .evidence-table td:first-child {
+      color: var(--ink);
+      font-weight: 800;
+      width: 24%;
+    }
+    .evidence-table td:nth-child(2) {
+      color: var(--blue);
+      font-weight: 800;
+      width: 22%;
+    }
+    .mini {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+    }
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .decision {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      min-height: 330px;
+    }
+    .decision.bad { border-color: #fed7aa; background: #fff7ed; }
+    .decision.good { border-color: #bbf7d0; background: #f0fdf4; }
+    .decision h3 {
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+    .decision ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .decision li { margin-bottom: 10px; }
+    .claim-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 22px;
+    }
+    .claim-box {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .claim-box h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .claim-box p, .claim-box li {
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .claim-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .evidence-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .evidence-pill {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .evidence-pill b {
+      display: block;
+      color: var(--ink);
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .evidence-pill span {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+    .compact td, .compact th {
+      font-size: 13px;
+      padding: 10px 12px;
+    }
+
+    @media (max-width: 860px) {
+      .grid-2, .grid-3, .grid-4, .flow { grid-template-columns: 1fr; }
+      .claim-grid, .evidence-strip { grid-template-columns: 1fr; }
+      .decision-grid { grid-template-columns: 1fr; }
+      .evidence-notes { grid-template-columns: 1fr; }
+      .log-evidence-grid { grid-template-columns: 1fr; }
+      .step::after { content: ""; }
+      .timeline { grid-template-columns: 1fr; }
+      .footer { display: none; }
+      .slide { padding-bottom: 54px; }
+      .evidence-slide { padding-top: 24px; }
+      .metric-figure img, .log-figure img, .architecture-figure img, .detector-figure img { max-height: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <div class="counter" id="counter">01 / 14</div>
+
+  <section class="slide">
+    <div class="title-wrap">
+      <div class="eyebrow">G3 AIOps Week 1 Lab</div>
+      <h1>Cứu hệ thống đang cháy</h1>
+      <p class="lead">Phân tích 24 giờ telemetry để tìm <span class="accent">WHEN</span>, <span class="blue">WHERE</span>, và <span class="green">WHAT</span> cho incident của <code>cart-service</code>.</p>
+      <div class="evidence-strip" style="margin-top:28px;text-align:left">
+        <div class="evidence-pill"><b>18:24</b><span>IF bắt metric degradation</span></div>
+        <div class="evidence-pill"><b>19:59</b><span>log xác nhận OOMKilled</span></div>
+        <div class="evidence-pill"><b>06:30</b><span>log-backtrace evidence</span></div>
+        <div class="evidence-pill"><b>2 detectors</b><span>Z-score + EWMA + Isolation Forest</span></div>
+      </div>
+      <p style="margin-top:22px;color:var(--muted)">Điều hướng: <span class="kbd">Space</span> <span class="kbd">↓</span> <span class="kbd">↑</span></p>
+    </div>
+    <div class="footer"><span>G3 Lab Presentation</span><span>Notebook-driven automation</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Problem</div>
+      <h2>Alert xuất hiện muộn, nhưng signal đã có từ trước</h2>
+      <p class="sublead">On-call thấy 5xx và restart loop ở cuối ngày. Nhiệm vụ của nhóm là chứng minh incident bắt đầu từ khi nào, ở service nào, và vì sao restart loop xảy ra.</p>
+      <div class="grid grid-4" style="margin-top:28px">
+        <div class="stat"><div class="num">2,820</div><div class="label">cart metric rows</div></div>
+        <div class="stat"><div class="num">6,430</div><div class="label">matched log events</div></div>
+        <div class="stat"><div class="num">7</div><div class="label">max restarts</div></div>
+        <div class="stat"><div class="num red">16.74%</div><div class="label">max 5xx rate</div></div>
+      </div>
+      <div class="claim-grid">
+        <div class="claim-box">
+          <h3>Bằng chứng từ đề bài</h3>
+          <p>Alert cuối ngày gồm <code>cart-service</code> 5xx/restart và timeout ở <code>order-service</code>, <code>payment-service</code>. Vì vậy phải chứng minh được cả nguyên nhân ở cart và ảnh hưởng downstream.</p>
+        </div>
+        <div class="claim-box">
+          <h3>Vì sao không chỉ nhìn alert 23:04?</h3>
+          <p>Alert là thời điểm hệ thống đã lộ lỗi. Lab yêu cầu tìm silent signal trước đó, nên pipeline phải đọc đủ 24h telemetry thay vì chỉ phân tích đoạn cuối.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>01 Problem</span><span>Raw metrics + logs</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Automation</div>
+      <h2>Luồng chạy chính là notebook, logic nằm trong scripts</h2>
+      <p class="sublead">Sơ đồ nhóm đang dùng: notebook để thuyết minh và inspect; scripts là source of truth để chạy lại từ raw data đến report.</p>
+      <div class="flow" style="margin-top:28px">
+        <div class="step"><b>Raw Evidence</b><span><code>metrics/*.csv</code><br><code>logs/*.jsonl</code></span></div>
+        <div class="step"><b>Notebook</b><span><code>notebooks/analysis.ipynb</code><br>presentation walkthrough</span></div>
+        <div class="step"><b>Pipeline</b><span><code>run_pipeline.py</code><br>orchestrates scripts</span></div>
+        <div class="step"><b>Generated Evidence</b><span>CSV, JSON, charts, timeline</span></div>
+        <div class="step"><b>Submission</b><span><code>FINDINGS.md</code><br><code>SUBMIT.md</code></span></div>
+      </div>
+      <div class="card" style="margin-top:24px">
+        <h3>Command nhóm demo</h3>
+        <p><code>make analyze</code> execute notebook và rebuild toàn bộ evidence. <code>make verify</code> kiểm tra output bắt buộc, log patterns, detector points và notebook artifact.</p>
+      </div>
+      <div class="claim-grid">
+        <div class="claim-box">
+          <h3>Bằng chứng automation</h3>
+          <ul>
+            <li><code>features_cart_service.csv</code>: feature từ metric raw.</li>
+            <li><code>anomalies.csv</code>: output của Z-score và IF.</li>
+            <li><code>log_pattern_events.csv</code>: log evidence có timestamp/line/pod.</li>
+          </ul>
+        </div>
+        <div class="claim-box">
+          <h3>Vì sao tách notebook và scripts?</h3>
+          <p>Notebook dùng để kể chuyện và inspect chart; scripts giữ logic repeatable. Nhờ vậy khi sửa detector hay finding, chỉ cần chạy lại <code>make analyze</code>.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>02 Automation</span><span>Reproducible by command</span></div>
+  </section>
+
+  <section class="slide evidence-slide">
+    <div class="wrap full">
+      <div class="eyebrow">Architecture</div>
+      <h2>Delivery architecture của nhóm</h2>
+      <div class="image-frame architecture-figure">
+        <img src="../architecture-notebook-script.png" alt="Notebook narrative plus script pipeline architecture" />
+      </div>
+      <div class="note" style="margin-top:14px">Cách đọc sơ đồ: raw metrics đi qua feature engineering và detector trước; log được dùng ở bước correlate/report để backtrace evidence và trả lời RCA.</div>
+    </div>
+    <div class="footer"><span>03 Architecture</span><span>Notebook narrative + script pipeline</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Method</div>
+      <h2>Detector set: chỉ dùng 2 phương pháp</h2>
+      <table style="margin-top:24px">
+        <thead>
+          <tr><th>Detector</th><th>Vai trò</th><th>Rule / Features</th><th>Points</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Rolling Z-score</strong></td>
+            <td>Detector thống kê đơn biến, dễ giải thích</td>
+            <td><code>abs(memory_mb_rolling_zscore) &gt; 3</code></td>
+            <td><strong>21</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Isolation Forest</strong></td>
+            <td>Detector đa biến cho trạng thái bất thường tổng hợp</td>
+            <td><code>memory_pct</code>, GC, latency, 5xx, restarts</td>
+            <td><strong>226</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note" style="margin-top:18px">Log analysis hiện tại không dùng Drain3. Pipeline dùng fixed pattern extraction trên JSONL message: cache eviction, GC overhead, OOM imminent, OOMKilled.</div>
+      <div class="claim-grid">
+        <div class="claim-box">
+          <h3>Vì sao chọn Z-score?</h3>
+          <p>Nó dễ giải thích cho memory spike/drop: một điểm bị flag khi memory lệch quá 3 sigma so với rolling baseline 120 samples trước đó.</p>
+        </div>
+        <div class="claim-box">
+          <h3>Vì sao cần Isolation Forest?</h3>
+          <p>Incident không chỉ là memory. IF nhìn đồng thời memory, GC, latency, 5xx và restart để bắt trạng thái degrade đa biến.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>04 Detection</span><span>Z-score + EWMA + Isolation Forest</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap wide">
+      <div class="eyebrow">Investigation Order</div>
+      <h2>Metric trước, log sau: không đọc log bằng hindsight</h2>
+      <div class="flow" style="margin-top:28px">
+        <div class="step"><b>1. Build metrics</b><span><code>cart-service.csv</code><br>memory, GC, latency, 5xx, restart</span></div>
+        <div class="step"><b>2. Detect anomaly</b><span>Isolation Forest: <code>18:24</code><br>Z-score: <code>19:33 / 20:00</code></span></div>
+        <div class="step"><b>3. Select scope</b><span>service: <code>cart-service</code><br>window: degradation -> OOM</span></div>
+        <div class="step"><b>4. Backtrace logs</b><span>earliest supporting log:<br><code>06:30:08</code></span></div>
+        <div class="step"><b>5. RCA</b><span>cache eviction -> heap pressure -> GC -> OOM loop</span></div>
+      </div>
+      <div class="note" style="margin-top:24px">Câu cần nói: <strong>06:30 không phải IF hay Z-score bắt.</strong> 06:30 là supporting log evidence tìm được sau khi metric detector đã chọn cart-service để điều tra.</div>
+      <div class="claim-grid">
+        <div class="claim-box">
+          <h3>Bằng chứng metric-first</h3>
+          <p>IF flag đầu tiên lúc <code>18:24</code>; Z-score spike liên quan incident lúc <code>19:33</code> và peak drop window lúc <code>20:00</code>.</p>
+        </div>
+        <div class="claim-box">
+          <h3>Vì sao backtrace?</h3>
+          <p>Metric chỉ nói hệ thống xấu đi. Log-backtrace mới cho biết cơ chế: cache eviction failed, heap pressure, GC overhead và OOMKilled.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>05 Investigation</span><span>Metric-first, log-backtrace</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap wide">
+      <div class="eyebrow">Why This Order</div>
+      <h2>Cơ chế và lý do: tại sao metric-first?</h2>
+      <div class="decision-grid">
+        <div class="decision bad">
+          <h3>Không làm: đọc log trước</h3>
+          <ol>
+            <li>Raw log có hàng chục nghìn dòng, chưa biết service/window nào cần ưu tiên.</li>
+            <li>Dễ chọn message nghe nguy hiểm như <code>failed</code>, rồi gán nguyên nhân bằng cảm tính.</li>
+            <li>Khó bảo vệ câu hỏi: vì sao dòng này quan trọng hơn các WARN/ERROR khác?</li>
+            <li>Rủi ro hindsight bias: biết kết quả rồi mới tìm log khớp với kết luận.</li>
+          </ol>
+        </div>
+        <div class="decision good">
+          <h3>Đang làm: metric-first, log-backtrace</h3>
+          <ol>
+            <li>Detector metric chọn scope khách quan: <code>cart-service</code>, degradation từ <code>18:24</code>.</li>
+            <li>Từ scope đó mới đọc log của đúng service và backtrace theo thời gian.</li>
+            <li>Log <code>06:30</code> trở thành supporting RCA evidence, không bị gọi nhầm là IF/Z-score anomaly.</li>
+            <li>Metric trả lời WHEN/WHERE; log trả lời WHAT/WHY.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="note" style="margin-top:18px">Cơ chế lồng trong code: <code>build_features.py</code> → <code>detect_anomalies.py</code> tạo <code>anomalies.csv</code> → <code>correlate_and_report.py</code> dùng anomaly window để correlate và backtrace log evidence.</div>
+    </div>
+    <div class="footer"><span>06 Rationale</span><span>Why not log-first</span></div>
+  </section>
+
+  <section class="slide evidence-slide">
+    <div class="wrap full">
+      <div class="eyebrow">Metric Evidence</div>
+      <h2>Memory, GC, latency, 5xx và restart cùng kể một câu chuyện</h2>
+      <div class="evidence-strip">
+        <div class="evidence-pill"><b>17:54</b><span>memory vượt 1GB</span></div>
+        <div class="evidence-pill"><b>19:44</b><span>memory vượt 1.5GB</span></div>
+        <div class="evidence-pill"><b>19:54</b><span>GC max 214.9ms</span></div>
+        <div class="evidence-pill"><b>23:43</b><span>5xx max 16.74%</span></div>
+      </div>
+      <div class="image-frame metric-figure">
+        <img src="assets/g3/cart_metrics_evidence.png" alt="Cart-service metric evidence chart" />
+      </div>
+      <p class="mini" style="margin-top:10px">Vì sao kết luận memory pressure: memory tăng dài hạn, GC tăng gần đỉnh memory, sau đó latency/5xx/restart xấu theo.</p>
+    </div>
+    <div class="footer"><span>07 Metrics</span><span>Prometheus-style CSV</span></div>
+  </section>
+
+  <section class="slide evidence-slide">
+    <div class="wrap full">
+      <div class="eyebrow">Log Backtrace</div>
+      <h2>Sau khi metric chọn cart-service, log giải thích nguyên nhân</h2>
+      <div class="evidence-strip">
+        <div class="evidence-pill"><b>line 4235</b><span>cache eviction failed</span></div>
+        <div class="evidence-pill"><b>line 4261</b><span>GC overhead heap 99%</span></div>
+        <div class="evidence-pill"><b>line 17743</b><span>OOMKilled</span></div>
+        <div class="evidence-pill"><b>6,430</b><span>matched log events</span></div>
+      </div>
+      <div class="log-evidence-grid">
+        <div>
+          <div class="timeline">
+            <div class="time green">06:30:08</div>
+            <div class="event good"><strong>ProductCatalogCache eviction failed</strong><br>Line 4235, supporting evidence sớm nhất.</div>
+            <div class="time">06:31:52</div>
+            <div class="event warn"><strong>GC overhead limit warning</strong><br>Heap pressure bắt đầu rõ trong log.</div>
+            <div class="time red">19:59:02</div>
+            <div class="event danger"><strong>Container OOMKilled</strong><br>Memory limit exceeded.</div>
+            <div class="time red">19:59:15</div>
+            <div class="event danger"><strong>OutOfMemoryError imminent</strong><br>Available heap &lt; 5%.</div>
+          </div>
+        </div>
+        <div class="image-frame log-figure">
+          <img src="assets/g3/cart_log_pattern_timeline.png" alt="Cart-service log pattern counts timeline" />
+        </div>
+      </div>
+      <p class="mini" style="margin-top:10px">Vì sao log quan trọng: metric chỉ thấy symptom; log cho thấy cache eviction và heap pressure là cơ chế hợp lý dẫn tới OOM.</p>
+    </div>
+    <div class="footer"><span>08 Logs</span><span>Backtrace after metric detection</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap full">
+      <div class="eyebrow">Correlation Mechanism</div>
+      <h2>Cơ chế lập trình Log-Backtrace</h2>
+      <p class="sublead">Làm thế nào pipeline map được metric anomalies với log events thành evidence cụ thể?</p>
+      
+      <div class="grid grid-4" style="margin-top: 2rem;">
+        <div class="card" style="border-top: 4px solid var(--blue);">
+          <h3>1. Metric Windowing</h3>
+          <p>Lấy kết quả từ <code>anomalies.csv</code> (IF, Z-score, EWMA) và resample/nhóm lại theo các cửa sổ <strong>30 phút</strong> để tạo chuỗi thời gian đếm số điểm bất thường.</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--green);">
+          <h3>2. Pattern Extraction</h3>
+          <p>Scan file <code>cart-service.log.jsonl</code>. Không dùng Drain3 phức tạp, pipeline áp dụng <strong>Fixed-pattern matching</strong> cho 4 nhóm lỗi cốt lõi (cache, GC, OOM).</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--orange);">
+          <h3>3. Log Aggregation</h3>
+          <p>Đếm (count) tần suất xuất hiện của các log pattern này cũng theo từng khung cửa sổ <strong>30 phút</strong> để đồng bộ trục thời gian với metric.</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--red);">
+          <h3>4. Matrix Merge</h3>
+          <p>Outer join 2 tập dữ liệu trên timestamp tạo ra <code>correlation_timeline.csv</code>. Điểm giao thoa (overlap) giữa đỉnh metric và đỉnh log chính là bằng chứng RCA vững chắc.</p>
+        </div>
+      </div>
+      
+      <div style="margin-top: 2rem; background: var(--panel); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--line);">
+        <h3 style="margin-top: 0; color: var(--ink);">Khối mã cốt lõi (<code>correlate_and_report.py</code>)</h3>
+        <p style="color: var(--muted); font-family: monospace; font-size: 14px; margin: 0; line-height: 1.6;">
+          <span style="color: #d97706;">anomaly_counts</span> = anomalies.groupby(<span style="color: #16a34a;">"window"</span>)[[<span style="color: #16a34a;">"z_anomaly"</span>, <span style="color: #16a34a;">"ewma_anomaly"</span>, <span style="color: #16a34a;">"if_anomaly"</span>]].sum()<br>
+          <span style="color: #d97706;">timeline</span> = pd.merge(log_counts, anomaly_counts, on=<span style="color: #16a34a;">"timestamp"</span>, how=<span style="color: #16a34a;">"outer"</span>).fillna(<span style="color: #2563eb;">0</span>)<br>
+          timeline.to_csv(<span style="color: #16a34a;">"correlation_timeline.csv"</span>)
+        </p>
+      </div>
+    </div>
+    <div class="footer"><span>Log Backtrace Mechanism</span><span>Time-series Correlation</span></div>
+  </section>
+
+  <section class="slide evidence-slide">
+    <div class="wrap full">
+      <div class="eyebrow">Detector Comparison</div>
+      <h2>Detector không thay log; detector chứng minh trajectory bất thường</h2>
+      <div class="evidence-strip">
+        <div class="evidence-pill"><b>21</b><span>Z-score points</span></div>
+        <div class="evidence-pill"><b>44</b><span>EWMA points</span></div>
+        <div class="evidence-pill"><b>226</b><span>IF points</span></div>
+        <div class="evidence-pill"><b>18:24</b><span>first IF anomaly</span></div>
+      </div>
+      <div class="image-frame detector-figure">
+        <img src="assets/g3/cart_anomaly_detector_comparison.png" alt="Anomaly detector comparison chart" />
+      </div>
+      <div class="evidence-notes" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="evidence-note">
+          <h3>Z-score bắt gì?</h3>
+          <p>Bắt đột biến memory so với trung bình 1 giờ tĩnh. Thích hợp tìm spike/drop.</p>
+        </div>
+        <div class="evidence-note">
+          <h3>EWMA bắt gì?</h3>
+          <p>Bắt sự dịch chuyển xu hướng (drift) nhờ trọng số nghiêng về quá khứ gần, nhạy hơn Z-score tiêu chuẩn.</p>
+        </div>
+        <div class="evidence-note">
+          <h3>Isolation Forest bắt gì?</h3>
+          <p>Bắt trạng thái xấu đa biến: memory 56.59%, GC 161.1ms, p99 406.5ms lúc 18:24.</p>
+        </div>
+        <div class="evidence-note">
+          <h3>Ảnh này đọc thế nào?</h3>
+          <p>Nền xám là memory %, 🔵 vòng xanh là Z-score, 🔺 tam giác xanh lá là EWMA, 🔴 chấm đỏ là IF.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>09 Detectors</span><span>Z-score + EWMA + Isolation Forest</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap full">
+      <div class="eyebrow">Structural Break</div>
+      <h2 style="color: var(--red); margin-bottom: 0.5rem;">Baseline Correlation (Full Day)</h2>
+      <p class="sublead" style="margin-bottom: 2rem;">The normal state of the system manifold before the incident window.</p>
+
+      <div style="display: flex; justify-content: center;">
+        <img src="assets/g3/exhaustive_full_day_correlation.png" alt="Full Day Correlation" style="width: 100%; max-height: 65vh; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+      </div>
+    </div>
+    <div class="footer"><span>Correlation Collapse</span><span>Full Day Baseline</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap full">
+      <div class="eyebrow">Structural Break</div>
+      <h2 style="color: var(--red); margin-bottom: 0.5rem;">Incident Matrix: The Collapse of Correlation</h2>
+      <p class="sublead" style="margin-bottom: 2rem;">Mapping the structural break to configure high-confidence isolation boundaries.</p>
+
+      <div style="display: flex; gap: 2rem; align-items: center;">
+        <div style="flex: 1.2;">
+            <img src="assets/g3/exhaustive_incident_correlation.png" alt="Incident Correlation" style="width: 100%; max-height: 60vh; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 1.5rem;">
+          <div style="background: var(--soft); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--red);">
+            <h3 style="margin-top: 0; color: var(--ink);">Decoupling &amp; Inversion</h3>
+            <p style="color: var(--muted); font-size: 15px; line-height: 1.6; margin: 0;">
+              During the incident window, the predictable baseline manifold shatters. Notice how historically
+              synchronized metrics suddenly show zero or inverse correlation (e.g., traffic drops abruptly
+              while latency or error rates spike to saturation). 
+              <br>The linear relationship Y &asymp; mX + c is
+              violently violated.
+            </p>
+          </div>
+          <div style="background: var(--soft); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--blue);">
+            <h3 style="margin-top: 0; color: var(--ink);">Optimizing iForest Sensitivity</h3>
+            <p style="color: var(--muted); font-size: 15px; line-height: 1.6; margin: 0;">
+              This structural break is exactly what the Isolation Forest thrives on. When data points violate
+              the normal correlation plane, they are cast into sparse, unpopulated regions of the
+              high-dimensional space. The iForest can easily slice these outliers with <strong>exceptionally
+              short path lengths</strong>, yielding anomaly scores approaching 1.0.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>Correlation Collapse</span><span>Incident Window</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap full">
+      <div style="display: flex; justify-content: center; width: 100%; height: 100%;">
+        <img src="../figures/2aoboqbml8d2mfqnybco79qqlrig5z2l4kbkclrs3.jpg" style="width: 100%; max-height: 85vh; object-fit: contain;" />
+      </div>
+    </div>
+  </section>
+  <section class="slide">
+    <div class="wrap full">
+      <div style="display: flex; justify-content: center; width: 100%; height: 100%;">
+        <img src="../figures/2aoboqbml8huqybnxvaumxfixcdept9q4gcmbwmc5.jpg" style="width: 100%; max-height: 85vh; object-fit: contain;" />
+      </div>
+    </div>
+  </section>
+  <section class="slide">
+    <div class="wrap full">
+      <div style="display: flex; justify-content: center; width: 100%; height: 100%;">
+        <img src="../figures/2aoboqbml8mqw4pzo5iz9qddiekechv64qtnlzh62.jpg" style="width: 100%; max-height: 85vh; object-fit: contain;" />
+      </div>
+    </div>
+  </section>
+  <section class="slide">
+    <div class="wrap full">
+      <div style="display: flex; justify-content: center; width: 100%; height: 100%;">
+        <img src="../figures/2aoboqbml8vjynw7oh1aol1emehuypofecmjyuqw1.jpg" style="width: 100%; max-height: 85vh; object-fit: contain;" />
+      </div>
+    </div>
+  </section>
+  <section class="slide">
+    <div class="wrap full">
+      <div style="display: flex; justify-content: center; width: 100%; height: 100%;">
+        <img src="../figures/2aoboqbml99uya8iou2ndvcut7o0zaj3icx4gyow4.jpg" style="width: 100%; max-height: 85vh; object-fit: contain;" />
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap wide">
+      <div class="eyebrow">Evidence Map</div>
+      <h2>Evidence nào được detect bởi phần nào?</h2>
+      <table class="evidence-table" style="margin-top:22px">
+        <thead>
+          <tr><th>Evidence</th><th>Source</th><th>Method</th><th>Proof shown</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>First metric anomaly</td>
+            <td><code>features_cart_service.csv</code></td>
+            <td>Isolation Forest over memory, GC, latency, 5xx, restart</td>
+            <td><code>18:24:00</code>: memory 56.59%, GC 161.1 ms, p99 406.5 ms.</td>
+          </tr>
+          <tr>
+            <td>Incident Z-score spike</td>
+            <td><code>anomalies.csv</code></td>
+            <td>Rolling Z-score <code>|z| &gt; 3</code></td>
+            <td><code>19:33:30</code>: memory about 1509 MB; <code>20:00</code>: restart drop.</td>
+          </tr>
+          <tr>
+            <td>EWMA drift detection</td>
+            <td><code>anomalies.csv</code></td>
+            <td>EWMA <code>|score| &gt; 3</code></td>
+            <td>Phát hiện xu hướng tăng dần của memory sớm hơn và đặc hơn so với Z-score.</td>
+          </tr>
+          <tr>
+            <td>Earliest supporting log</td>
+            <td><code>cart-service.log.jsonl</code></td>
+            <td>Backtrace after metric-selected service</td>
+            <td><code>06:30:08</code>, line <strong>4235</strong>: ProductCatalogCache eviction failed.</td>
+          </tr>
+          <tr>
+            <td>Early heap pressure</td>
+            <td><code>cart-service.log.jsonl</code></td>
+            <td>JSONL parse + message match</td>
+            <td><code>06:31:52</code>, line <strong>4261</strong>: GC overhead, heap 99%.</td>
+          </tr>
+          <tr>
+            <td>OOM / restart collapse</td>
+            <td>log JSONL + <code>anomalies.csv</code></td>
+            <td>OOM log pattern + Rolling Z-score <code>|z| &gt; 3</code></td>
+            <td><code>19:59:02</code> OOMKilled; <code>20:00</code> has <strong>10</strong> Z-score points.</td>
+          </tr>
+          <tr>
+            <td>Worst runtime window</td>
+            <td><code>correlation_timeline.csv</code></td>
+            <td>30-min aggregation of Isolation Forest flags</td>
+            <td><code>23:30</code>: peak IF window has <strong>60</strong> anomaly points.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mini" style="margin-top:14px">Kết luận nói trên slide: detector metric chọn cart-service trước; log 06:30 là supporting/backtrace evidence, không phải Z-score hay IF anomaly.</p>
+    </div>
+    <div class="footer"><span>10 Evidence Map</span><span>What detected what</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap wide">
+      <div class="eyebrow">WHEN / WHERE / WHAT</div>
+      <h2>Kết luận kỹ thuật</h2>
+      <div class="grid grid-3" style="margin-top:22px">
+        <div class="card">
+          <h3><span class="accent">WHEN</span></h3>
+          <p>Metric detector bắt degradation lúc <strong>18:24 UTC</strong>. Log backtrace tìm supporting evidence sớm hơn lúc <strong>06:30:08 UTC</strong>.</p>
+        </div>
+        <div class="card">
+          <h3><span class="blue">WHERE</span></h3>
+          <p>Incident bắt đầu ở <strong>cart-service</strong>. Chỉ báo sớm: memory usage, GC pause, p99 latency và cache eviction logs.</p>
+        </div>
+        <div class="card">
+          <h3><span class="green">WHAT</span></h3>
+          <p>Hypothesis: memory leak ở product catalog cache references. Restart loop đến từ cache warm-up + traffic pressure.</p>
+        </div>
+      </div>
+      <table class="compact" style="margin-top:18px">
+        <thead><tr><th>Downstream evidence</th><th>Timestamp</th><th>Max value</th><th>Vì sao liên quan?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>order-service upstream timeout</strong></td><td><code>23:44:30</code></td><td>27.44%</td><td>Caller timeout tăng sau khi cart đã degrade/restart.</td></tr>
+          <tr><td><strong>payment-service upstream timeout</strong></td><td><code>23:43:30</code></td><td>15.81%</td><td>Ảnh hưởng lan truyền sang service phụ thuộc.</td></tr>
+          <tr><td><strong>api-gateway cart upstream error</strong></td><td><code>23:40:00</code></td><td>20.32%</td><td>Gateway thấy lỗi khi gọi lên cart-service.</td></tr>
+        </tbody>
+      </table>
+      <p class="mini" style="margin-top:10px">Vì sao WHERE là cart-service: cart có memory/GC/OOM trước; order/payment/api-gateway xấu muộn hơn nên được xem là downstream impact.</p>
+    </div>
+    <div class="footer"><span>11 RCA</span><span>Postmortem answer</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap full">
+      <div class="eyebrow">Incident Dynamics</div>
+      <h2>Tại sao lỗi "Âm ỉ" từ sáng nhưng đến "Tối mới bùng phát"?</h2>
+      <p class="sublead">Câu chuyện về sự cộng hưởng giữa Memory Leak chậm và Traffic Pressure.</p>
+      
+      <div class="grid grid-2" style="margin-top: 2rem;">
+        <div class="card" style="border-top: 4px solid var(--orange); background: #fffbeb;">
+          <h3>🌤️ Ban ngày: Giai đoạn "Âm ỉ" (Smoldering)</h3>
+          <ul style="color: var(--muted); line-height: 1.6; padding-left: 1.2rem;">
+            <li style="margin-bottom: 0.5rem;"><strong>06:30:</strong> Log bắt đầu báo <code>ProductCatalogCache eviction failed</code>. Rác (leak) bắt đầu tích tụ dần trong background.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Traffic thấp:</strong> Lượng request mua hàng ban ngày chưa đủ lớn. Memory tăng chậm và Garbage Collector (GC) vẫn dọn dẹp kịp (dù ngày càng chật vật).</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Dấu hiệu:</strong> Không rớt request, không có 5xx. Hệ thống vẫn "ngắc ngoải" chịu đựng được nên các Alert tĩnh thông thường không hề bị trigger.</li>
+          </ul>
+        </div>
+        
+        <div class="card" style="border-top: 4px solid var(--red); background: #fef2f2;">
+          <h3>🌙 Buổi tối: Giai đoạn "Bùng phát" (Flare-up)</h3>
+          <ul style="color: var(--muted); line-height: 1.6; padding-left: 1.2rem;">
+            <li style="margin-bottom: 0.5rem;"><strong>Rush hour traffic:</strong> Lưu lượng khách truy cập giỏ hàng tăng đột biến vào khung giờ tối (từ ~18:00).</li>
+            <li style="margin-bottom: 0.5rem;"><strong>18:24 Degradation:</strong> Lượng query vào product catalog tăng vọt &rarr; Cache sinh ra ồ ạt nhưng không eviction được &rarr; <strong>Heap bị lấp đầy (99%)</strong>.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>19:59 OOMKilled:</strong> GC chạy liên tục (Thrashing) gây đứng máy, latency spike, dẫn tới sập container.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Restart Loop:</strong> Khởi động lại giữa lúc traffic cao nhất &rarr; Cache warm up lại từ đầu dưới áp lực cực lớn &rarr; Lại tiếp tục OOM. Dẫn đến sụp đổ dây chuyền (Cascade failure) sang các service downstream.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="note" style="margin-top: 2rem; border-color: var(--blue); background: #f0fdf4; color: var(--ink);">
+        <strong>Takeaway:</strong> Lỗi Memory Leak thường không làm sập hệ thống ngay lập tức. Nó đóng vai trò làm <em>"suy yếu hệ miễn dịch"</em> của service, cho đến khi <strong>Evening Traffic Spike</strong> giáng "cú đấm quyết định" làm nổ tung giới hạn RAM của container.
+      </div>
+    </div>
+    <div class="footer"><span>Incident Dynamics</span><span>Smoldering vs Flare-up</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Telemetry Blind Spot</div>
+      <h2>Prometheus không thấy đỉnh thật, log thấy OOM</h2>
+      <div class="grid grid-3" style="margin-top:28px">
+        <div class="stat"><div class="num">1640.54</div><div class="label">max observed MB</div></div>
+        <div class="stat"><div class="num red">2048</div><div class="label">container limit MB</div></div>
+        <div class="stat"><div class="num">1830s</div><div class="label">metrics gap</div></div>
+      </div>
+      <div class="card" style="margin-top:24px">
+        <h3>Ý nghĩa</h3>
+        <p>Metrics chỉ sample mỗi 30 giây và còn có gap 11:29:30 -> 12:00:00. Vì vậy max metric chỉ thấy 1640.54 MB lúc 19:57:00, trong khi log cho thấy OOMKilled lúc 19:59:02 với memory limit 2GB.</p>
+      </div>
+      <div class="note" style="margin-top:16px">Vì sao cần cả metric và log: metric cho trend và detector; log xác nhận event mà metric sampling có thể bỏ lỡ.</div>
+    </div>
+    <div class="footer"><span>12 Blind spot</span><span>Metrics + logs are both needed</span></div>
+  </section>
+
+  
+
+  
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progress = document.getElementById('progress');
+    const counter = document.getElementById('counter');
+
+    function activeIndex() {
+      const viewportMid = window.scrollY + window.innerHeight / 2;
+      let best = 0;
+      for (let i = 0; i < slides.length; i += 1) {
+        if (slides[i].offsetTop <= viewportMid) best = i;
+      }
+      return best;
+    }
+
+    function updateUi() {
+      const index = activeIndex();
+      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+      counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+    }
+
+    function go(delta) {
+      const next = Math.max(0, Math.min(slides.length - 1, activeIndex() + delta));
+      slides[next].scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.addEventListener('scroll', updateUi, { passive: true });
+    window.addEventListener('resize', updateUi);
+    window.addEventListener('keydown', (event) => {
+      if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
+        event.preventDefault();
+        go(1);
+      }
+      if (['ArrowUp', 'PageUp'].includes(event.key)) {
+        event.preventDefault();
+        go(-1);
+      }
+      if (event.key === 'Home') slides[0].scrollIntoView({ behavior: 'smooth' });
+      if (event.key === 'End') slides[slides.length - 1].scrollIntoView({ behavior: 'smooth' });
+    });
+    updateUi();
+  </script>
+</body>
+</html>

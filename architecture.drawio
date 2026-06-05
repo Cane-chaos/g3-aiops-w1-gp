@@ -5,7 +5,7 @@
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
-        <mxCell id="title" value="G3 Local AIOps Architecture - Prometheus, Logs, Automation, RCA" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=26;fontStyle=1;fontColor=#111827;" vertex="1" parent="1">
+        <mxCell id="title" value="G3 Local AIOps Architecture - Metric-First Detection, Log Backtrace, RCA" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=26;fontStyle=1;fontColor=#111827;" vertex="1" parent="1">
           <mxGeometry x="280" y="20" width="1140" height="50" as="geometry" />
         </mxCell>
 
@@ -101,7 +101,7 @@
         <mxCell id="features" value="2. build_features.py&lt;br&gt;memory ratio, GC trend, rolling latency, log windows" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;fontColor=#0f172a;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
           <mxGeometry x="1330" y="340" width="245" height="55" as="geometry" />
         </mxCell>
-        <mxCell id="detect" value="3. analyze_incident.py&lt;br&gt;Rolling z-score / MAD / Isolation Forest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;fontColor=#7f1d1d;fontSize=12;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+        <mxCell id="detect" value="3. detect_anomalies.py&lt;br&gt;Metric-first detectors&lt;br&gt;Rolling Z-score + EWMA + iForest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;fontColor=#7f1d1d;fontSize=12;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
           <mxGeometry x="1330" y="410" width="245" height="55" as="geometry" />
         </mxCell>
         <mxCell id="reportgen" value="4. generate_report.py&lt;br&gt;correlate metrics + logs, answer WHEN / WHERE / WHAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=12;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
@@ -124,7 +124,7 @@
           <mxGeometry x="145" y="690" width="320" height="78" as="geometry" />
         </mxCell>
 
-        <mxCell id="must-answer" value="G3 scoring alignment: WHEN = earliest anomaly and silent signal, WHERE = first service / metric / log pattern, WHAT = root-cause hypothesis for cart-service restart loop." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#7c2d12;fontSize=14;fontStyle=1;align=center;" vertex="1" parent="1">
+        <mxCell id="must-answer" value="G3 scoring alignment: WHEN = metric detector first flags degradation, then log backtrace finds earlier supporting evidence; WHERE = cart-service / memory+GC+latency / cache+OOM logs; WHAT = root-cause hypothesis for restart loop." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#7c2d12;fontSize=14;fontStyle=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="145" y="805" width="655" height="58" as="geometry" />
         </mxCell>
         <mxCell id="automation-note" value="Local automation contract: one command reads g3-data and produces validation_summary.json, anomaly comparison, log patterns, correlation timeline, charts, and FINDINGS.generated.md." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#4f46e5;fontColor=#312e81;fontSize=13;fontStyle=1;align=center;" vertex="1" parent="1">

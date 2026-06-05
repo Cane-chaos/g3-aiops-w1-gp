@@ -19,7 +19,14 @@ DETECTOR_FEATURES = [
 def detect_cart_anomalies(features: pd.DataFrame, contamination: float = 0.08) -> pd.DataFrame:
     result = features.copy()
     result["z_anomaly"] = result["memory_mb_rolling_zscore"].abs() > 3
-    result["mad_anomaly"] = result["memory_mb_rolling_mad_score"] > 3.5
+    result["memory_spike_anomaly"] = result["memory_mb_rolling_zscore"] > 3
+    result["memory_drop_anomaly"] = result["memory_mb_rolling_zscore"] < -3
+
+    ewma_mean = result["memory_mb"].ewm(span=120, adjust=False).mean()
+    ewma_std = result["memory_mb"].ewm(span=120, adjust=False).std()
+    result["memory_mb_ewma_score"] = (result["memory_mb"] - ewma_mean) / ewma_std
+    result["ewma_anomaly"] = result["memory_mb_ewma_score"].fillna(0).abs() > 3
+
 
     model_input = result[DETECTOR_FEATURES].ffill().bfill()
     scaled = StandardScaler().fit_transform(model_input)
@@ -42,9 +49,11 @@ def write_anomalies(input_dir: Path, output_dir: Path) -> pd.DataFrame:
         "http_5xx_rate",
         "container_restart_count",
         "memory_mb_rolling_zscore",
-        "memory_mb_rolling_mad_score",
         "z_anomaly",
-        "mad_anomaly",
+        "memory_spike_anomaly",
+        "memory_drop_anomaly",
+        "memory_mb_ewma_score",
+        "ewma_anomaly",
         "if_anomaly",
         "if_score",
     ]
@@ -58,9 +67,9 @@ def write_anomalies(input_dir: Path, output_dir: Path) -> pd.DataFrame:
                 "anomaly_points": int(anomalies["z_anomaly"].sum()),
             },
             {
-                "detector": "Rolling MAD",
-                "rule": "memory_mb rolling MAD score > 3.5",
-                "anomaly_points": int(anomalies["mad_anomaly"].sum()),
+                "detector": "EWMA",
+                "rule": "abs(memory_mb ewma_score span=120) > 3",
+                "anomaly_points": int(anomalies["ewma_anomaly"].sum()),
             },
             {
                 "detector": "Isolation Forest",

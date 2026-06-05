@@ -24,12 +24,9 @@ def build_cart_features(cart: pd.DataFrame, window: int = 120) -> pd.DataFrame:
         rolling = features[col].rolling(window, min_periods=10)
         mean = rolling.mean()
         std = rolling.std().replace(0, np.nan)
-        median = rolling.median()
-        mad = (features[col] - median).abs().rolling(window, min_periods=10).median().replace(0, np.nan)
         features[f"{col}_rolling_mean_1h"] = mean
         features[f"{col}_rolling_std_1h"] = std
         features[f"{col}_rolling_zscore"] = (features[col] - mean) / std
-        features[f"{col}_rolling_mad_score"] = 0.6745 * (features[col] - median).abs() / mad
 
     return features.replace([np.inf, -np.inf], np.nan)
 

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIOps System Q&A: Architectural Trade-offs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-1: #3b82f6;
+            --accent-2: #8b5cf6;
+            --accent-3: #10b981;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0 0 1rem 0;
+            background: linear-gradient(to right, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title::before {
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-1), var(--accent-2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            border-color: #475569;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-q {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0 0 1rem 0;
+        }
+
+        .card-a {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .highlight {
+            color: var(--accent-1);
+            font-weight: 600;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-1);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Micro-animations for details */
+        summary {
+            list-style: none;
+            outline: none;
+        }
+        summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Hệ Thống AIOps: Quyết Định Đánh Đổi</h1>
+    <p class="subtitle">Phân tích sâu vào triết lý thiết kế "Why This, Not That" của toàn bộ pipeline phân tích sự cố.</p>
+</header>
+
+<div class="container">
+
+    <!-- CATEGORY 1 -->
+    <h2 class="category-title">1. Lựa chọn Thuật toán & Mô hình (Algorithms)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag">Tranh luận chéo</span>
+            <h3 class="card-q">Q: Tại sao dùng Isolation Forest (IF) mà không phải Drain3?</h3>
+            <p class="card-a">
+                Đây là một so sánh "cam và táo". <b>Isolation Forest</b> là mô hình phát hiện dị thường trên chuỗi thời gian định lượng (Metric data) để biết "Khi nào" hệ thống hỏng. <b>Drain3</b> là thuật toán gom cụm văn bản phi cấu trúc (Log parsing). Pipeline dùng IF cho Metrics để chẩn bệnh, và cố tình không dùng Drain3 cho Logs vì chúng ta chỉ cần dùng Regex quét đúng các <span class="highlight">Fixed Patterns (Lỗi đã biết)</span> để xác nhận là đủ, không cần học mẫu log mới.
+            </p>
+        </div>
+
+        <div class="card">
+            <span class="tag">Alerting Logic</span>
+            <h3 class="card-q">Q: Tại sao IF phát hiện dị thường trễ (18:24) trong khi log đã báo lỗi từ sáng (06:30)? Sao không lấy log làm trigger báo động luôn?</h3>
+            <p class="card-a">
+                Log báo <span class="highlight">cache eviction failed</span> từ 06:30 là những tiếng nấc nhỏ, hệ thống vẫn tự dọn dẹp được và user chưa bị ảnh hưởng. IF chỉ "bấm còi" khi sự suy thoái lan ra toàn cục (memory đầy + GC pause cao + latency tăng + 5xx xuất hiện lúc 18:24). Nếu cứ thấy 1 dòng log lỗi mà báo động ngay, team vận hành sẽ bị <b>Alert Fatigue</b> (kiệt sức vì báo động giả).
+            </p>
+        </div>
+
+        <div class="card">
+            <span class="tag">Thống kê</span>
+            <h3 class="card-q">Q: Tại sao Rolling Z-score chỉ áp dụng cho Memory mà không check p99 Latency hay 5xx Rate?</h3>
+            <p class="card-a">
+                Latency và 5xx Rate mang tính <b>spiky by nature</b> (chớp nhoáng theo traffic), dùng Z-score sẽ sinh vô số false positives. Memory leak lại có tính <b>tích lũy (cumulative)</b> êm đềm, Z-score cực kỳ xuất sắc trong việc phát hiện độ lệch của các xu hướng từ từ này và bắt trúng điểm gãy (spike/drop).
+            </p>
+        </div>
+    </div>
+
+    <!-- CATEGORY 2 -->
+    <h2 class="category-title">2. Xử lý Dữ liệu & Đặc trưng (Feature Engineering)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag">Chuẩn hóa</span>
+            <h3 class="card-q">Q: Tại sao đưa memory_pct (%) vào mô hình IF thay vì memory_mb (giá trị tuyệt đối)?</h3>
+            <p class="card-a">
+                Container có cấu hình RAM khác nhau (vd: 2GB vs 8GB). Nếu nạp số MB tuyệt đối, AI không thể tổng quát hóa. Đổi sang <span class="highlight">%</span> giúp model hiểu được khái niệm "tiệm cận tới hạn" (95% là nguy hiểm), nhờ đó model này có thể tái sử dụng (transfer learning) chéo cho mọi service mà không cần train lại.
+            </p>
+        </div>
+
+        <div class="card">
+            <span class="tag">Cửa sổ thời gian</span>
+            <h3 class="card-q">Q: Tại sao lấy Rolling Window là 120 mẫu (1 giờ) thay vì đường cơ sở cả ngày (Daily Baseline)?</h3>
+            <p class="card-a">
+                Dữ liệu 24 giờ sẽ làm "phẳng hóa" các biến động tinh tế. 1 giờ (120 mẫu x 30s) vừa đủ dài để thiết lập trạng thái <b>"bình thường ngay trước sự cố"</b>, vừa đủ ngắn để model kịp phản ứng ngay khi xu hướng thay đổi đột ngột.
+            </p>
+        </div>
+
+        <div class="card">
+            <span class="tag">Đồng bộ</span>
+            <h3 class="card-q">Q: Tại sao lại gom nhóm thời gian (Correlation Timeline) theo block 30 phút?</h3>
+            <p class="card-a">
+                Sự cố hệ thống phân tán không xảy ra tức thời. Từ lúc GC Pause tăng, đến rớt Cache, cho đến khi OOMKilled có thể kéo dài hàng chục phút (Cascade failure). Cửa sổ 30 phút hoạt động như một "cái rổ" gom trọn các chuỗi hệ quả vào một ngữ cảnh duy nhất để con người dễ đọc báo cáo.
+            </p>
+        </div>
+    </div>
+
+    <!-- CATEGORY 3 -->
+    <h2 class="category-title">3. Chiến lược Phân tích Log (Log Analysis)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag">Hướng tiếp cận</span>
+            <h3 class="card-q">Q: Tại sao dùng "Metric-first, Log-backtrace" thay vì "Log-first"?</h3>
+            <p class="card-a">
+                Bắt đầu bằng Log giống như mò kim đáy bể vì volume cực lớn và đầy rác (Noise). <span class="highlight">Metrics không biết nói dối</span>. Dùng Metric để khoanh vùng chính xác <b>WHERE</b> (Cart-service) và <b>WHEN</b> (18:24) sẽ giảm không gian tìm kiếm xuống hàng ngàn lần, rồi ta mới dùng Log để đọc rõ <b>WHAT/WHY</b>.
+            </p>
+        </div>
+
+        <div class="card">
+            <span class="tag">Công cụ</span>
+            <h3 class="card-q">Q: Tại sao dùng chuỗi cứng (Fixed Pattern Regex) thay vì Elasticsearch / Full-text search?</h3>
+            <p class="card-a">
+                Bởi vì mục tiêu ở bước này là xác thực (Verification) chứ không phải tìm kiếm mù (Blind Search). Khi Metric đã báo lỗi OOM, ta chỉ cần quét file JSONL đúng dòng chữ `Container OOMKilled`. Cách này sử dụng RAM tí hon, chạy siêu tốc (cỡ mili-giây) mà không cần phải đứng lên (spin up) cả một cụm ELK đắt đỏ.
+            </p>
+        </div>
+    </div>
+
+    <!-- CATEGORY 4 -->
+    <h2 class="category-title">4. Kiến trúc Pipeline (Architecture)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag">Lưu trữ</span>
+            <h3 class="card-q">Q: Tại sao đọc CSV/JSONL tĩnh thay vì query API trực tiếp (Prometheus / Loki)?</h3>
+            <p class="card-a">
+                Đây là bài toán <span class="highlight">Hậu kiểm (Offline Postmortem)</span>. Dữ liệu trên live sẽ bị xóa hoặc nén (rollup) sau vài ngày do Retention Policy. Việc snapshot thành CSV giúp đảm bảo tính <b>Bất biến (Reproducibility)</b>: Năm sau chạy lại lệnh `make analyze` vẫn ra kết quả giống hệt hôm nay.
+            </p>
+        </div>
+
+        <div class="card">
+            <span class="tag">Orchestration</span>
+            <h3 class="card-q">Q: Tại sao dùng "Make" và tách script `.py` thay vì vứt hết logic vào Jupyter Notebook?</h3>
+            <p class="card-a">
+                Jupyter Notebook rất kém trong việc version control (Git diff xấu) và viết Unit test. Pipeline nén toàn bộ logic nặng vào thư mục `scripts/` (chuẩn Software Engineering), biến Notebook thành vỏ bọc trình chiếu (Report Viewer), còn <b>Makefile</b> làm cầu nối chạy một lệnh ăn ngay mà không cần cài Airflow cồng kềnh.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
