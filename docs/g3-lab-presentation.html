@@ -467,7 +467,7 @@
         <div class="evidence-pill"><b>18:24</b><span>IF bắt metric degradation</span></div>
         <div class="evidence-pill"><b>19:59</b><span>log xác nhận OOMKilled</span></div>
         <div class="evidence-pill"><b>06:30</b><span>log-backtrace evidence</span></div>
-        <div class="evidence-pill"><b>2 detectors</b><span>Z-score + EWMA + Isolation Forest</span></div>
+        <div class="evidence-pill"><b>3 detectors</b><span>Z-score + EWMA + Isolation Forest</span></div>
       </div>
       <p style="margin-top:22px;color:var(--muted)">Điều hướng: <span class="kbd">Space</span> <span class="kbd">↓</span> <span class="kbd">↑</span></p>
     </div>
@@ -548,8 +548,8 @@
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Method</div>
-      <h2>Detector set: chỉ dùng 2 phương pháp</h2>
-      <table style="margin-top:24px">
+      <h2>Detector set: triển khai 3 phương pháp</h2>
+      <table style="margin-top:24px; font-size: 0.9em;">
         <thead>
           <tr><th>Detector</th><th>Vai trò</th><th>Rule / Features</th><th>Points</th></tr>
         </thead>
@@ -557,8 +557,14 @@
           <tr>
             <td><strong>Rolling Z-score</strong></td>
             <td>Detector thống kê đơn biến, dễ giải thích</td>
-            <td><code>abs(memory_mb_rolling_zscore) &gt; 3</code></td>
+            <td><code>abs(zscore) &gt; 3</code></td>
             <td><strong>21</strong></td>
+          </tr>
+          <tr>
+            <td><strong>EWMA</strong></td>
+            <td>Phát hiện xu hướng (trend shift) và memory drift</td>
+            <td><code>abs(ewma_score) &gt; 3</code>, span=120</td>
+            <td><strong>44</strong></td>
           </tr>
           <tr>
             <td><strong>Isolation Forest</strong></td>
@@ -594,7 +600,7 @@
         <div class="step"><b>4. Backtrace logs</b><span>earliest supporting log:<br><code>06:30:08</code></span></div>
         <div class="step"><b>5. RCA</b><span>cache eviction -> heap pressure -> GC -> OOM loop</span></div>
       </div>
-      <div class="note" style="margin-top:24px">Câu cần nói: <strong>06:30 không phải IF hay Z-score bắt.</strong> 06:30 là supporting log evidence tìm được sau khi metric detector đã chọn cart-service để điều tra.</div>
+      <div class="note" style="margin-top:24px"><strong>Lưu ý quan trọng:</strong> 06:30 không phải do IF, EWMA hay Z-score bắt. 06:30 là supporting log evidence tìm được sau khi metric detector đã chọn cart-service để điều tra.</div>
       <div class="claim-grid">
         <div class="claim-box">
           <h3>Bằng chứng metric-first</h3>
